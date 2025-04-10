@@ -804,7 +804,7 @@ def process():
                 return jsonify({'message': 'File uploaded successfully', 'content': file_content}), 200
             else:
                 return jsonify({'error': 'File type not allowed'}), 400
-    except (e):
+    except Exception as e::
         return jsonify({'error': str(e}), 400
 
 if __name__ == '__main__':
