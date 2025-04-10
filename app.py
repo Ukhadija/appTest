@@ -5,7 +5,7 @@ import re
 import random
 import itertools
 import csv
-from langchain.llms import HuggingFacePipeline
+from langchain_community.llms import HuggingFacePipeline
 from langchain import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 import json
