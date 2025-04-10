@@ -8,7 +8,7 @@ CORS(app)  # Allows all origins (for testing)
 
 # Set upload folder and allowed extensions for file uploads
 UploadFolder = '/path/to/upload/folder'  # Modify with the actual path
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','csv'}  # Add more file types if needed
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'}  # Add more file types if needed
 
 # Configure Flask app
 app.config['UploadFolder'] = UploadFolder
@@ -28,14 +28,13 @@ def process_text(filename):
     # Open the file and read the content
     with open(file_path, 'r') as file:
         file_content = file.read()
-
     
     os.remove(file_path)
     return file_content
 
 @app.route('/process', methods=['POST'])
 def process():
-    # Check if the request contains a file
+    # If the request contains a file
     if 'file' in request.files:
         file = request.files['file']
         
@@ -49,19 +48,17 @@ def process():
             # Save the file to the upload folder
             file.save(os.path.join(app.config['UploadFolder'], filename))
             
-            return jsonify({'message': 'File uploaded successfully', 'filename': filename}), 200
+            # Process the uploaded text or CSV file
+            file_content = process_text(filename)
+            
+            return jsonify({'message': 'File uploaded successfully', 'content': file_content}), 200
         else:
             return jsonify({'error': 'File type not allowed'}), 400
 
-    # If no file is uploaded, proceed with processing the text
-    data = request.get_json()
-    if 'text' not in data:
-        return jsonify({'error': 'Missing text field'}), 400
+    # If no file is uploaded, proceed with processing text (when sending JSON data)
+    output_text = process_text(input_text)
     
-    input_text = data['text']
-    output_text = process_text(filename)
-    
-    return jsonify({'input': input_text, 'output': output_text})
+    return output_text
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
