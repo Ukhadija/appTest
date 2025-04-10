@@ -805,7 +805,7 @@ def process():
             else:
                 return jsonify({'error': 'File type not allowed'}), 400
     except Exception as e::
-        return jsonify({'error': str(e}), 400
+        return jsonify({'error': str(e)}), 400
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
