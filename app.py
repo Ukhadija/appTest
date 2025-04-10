@@ -775,7 +775,7 @@ def process_text(filename):
     # Open the file and read the content
     with open(file_path, 'r') as file:
         file_content = file.read()
-    dictionary = TagGeneration(file_content)
+    dictionary = TagGeneration(file_path)
     os.remove(file_path)
     return dictionary
 
