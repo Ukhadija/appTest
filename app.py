@@ -487,8 +487,8 @@ def model_load():
     
     model = AutoModelForCausalLM.from_pretrained(
         model,
-        device_map={"": 0},
-        quantization_config=bnb_config,
+        device_map="cpu",
+        load_in_8bit=False,
         use_auth_token=access_token
     )
     
