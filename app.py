@@ -9,7 +9,6 @@ from langchain.llms import HuggingFacePipeline
 from langchain import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 import json
-from transformers import BitsAndBytesConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import transformers
 import os
@@ -28,7 +27,6 @@ from qdrant_client.http import models
 from io import StringIO
 from pathlib import Path
 
-torch.cuda.is_available()
 counter = 0
 
 
