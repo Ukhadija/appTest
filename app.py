@@ -16,7 +16,6 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import transformers
 import torch
 import os
-from textwrap import wrap
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from qdrant_client import QdrantClient
@@ -29,7 +28,6 @@ from qdrant_client.models import PointStruct
 import numpy as np
 import csv
 from qdrant_client.http import models
-from bs4 import BeautifulSoup
 from io import StringIO
 from pathlib import Path
 
