@@ -2,6 +2,32 @@ import os
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
+import re
+import random
+import itertools
+import csv
+from langchain_community.llms import HuggingFacePipeline
+from langchain import PromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+import json
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import transformers
+from sklearn.feature_extraction.text import TfidfVectorizer
+from qdrant_client import QdrantClient
+from sklearn.metrics.pairwise import cosine_similarity
+from qdrant_client.models import Distance, VectorParams
+import nomic
+from nomic import embed
+from qdrant_client.http import models
+from qdrant_client.models import PointStruct
+import numpy as np
+import csv
+from qdrant_client.http import models
+from io import StringIO
+from pathlib import Path
+
+counter = 0
+
 
 app = Flask(__name__)
 CORS(app)  # Allows all origins (for testing)
