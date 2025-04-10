@@ -5,16 +5,13 @@ import re
 import random
 import itertools
 import csv
-import torch
 from langchain.llms import HuggingFacePipeline
 from langchain import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 import json
-from torch import cuda, bfloat16
 from transformers import BitsAndBytesConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import transformers
-import torch
 import os
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -469,15 +466,6 @@ def check_doc_separator(lines):
     return '\r\n' 
 
 def model_load():
-    bnb_config = BitsAndBytesConfig( # Use BitsAndBytesConfig directly instead of transformers.BitsAndBytesConfig
-    load_in_4bit=True,
-    bnb_4bit_quant_type='nf4',
-    bnb_4bit_use_double_quant=True,
-    bnb_4bit_compute_dtype=bfloat16
-    )
-    
-    print("CUDA Available:", torch.cuda.is_available())
-
     access_token = "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"
     model = "meta-llama/Llama-2-7b-chat-hf"
     
