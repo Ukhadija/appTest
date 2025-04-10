@@ -36,7 +36,7 @@ app = Flask(__name__)
 CORS(app)  # Allows all origins (for testing)
 
 # Set upload folder and allowed extensions for file uploads
-UploadFolder = '/path/to/upload/folder'  # Modify with the actual path
+UploadFolder = 'UploadFolder'  # Modify with the actual path
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'}  # Add more file types if needed
 
 # Ensure the upload folder exists
@@ -598,7 +598,6 @@ def run_time_tag_gen(collection_name,file,client):
     
     with open(file, 'r', encoding='utf-8', errors='ignore') as f:
         lines = f.readlines()
-
         first_line = lines[0].strip()
         delimiter = detect_delimiter(first_line)
         doc_separator = check_doc_separator(lines)
@@ -782,30 +781,31 @@ def process_text(filename):
 @app.route('/process', methods=['POST'])
 def process():
     # If the request contains a file
-    if 'file' in request.files:
-        file = request.files['file']
-        
-        if file.filename == '':
-            return jsonify({'error': 'No selected file'}), 400
-
-        if file and allowed_file(file.filename):
-            # Secure the filename to prevent directory traversal attacks
-            filename = secure_filename(file.filename)
+    try:
+        if 'file' in request.files:
+            file = request.files['file']
             
-            # Save the file to the upload folder
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            
-            # Process the uploaded text or CSV file
-            file_content = process_text(filename)
-            
-            if not file_content:
-                return jsonify({'error': 'Unable to process the file'}), 500
-            
-            return jsonify({'message': 'File uploaded successfully', 'content': file_content}), 200
-        else:
-            return jsonify({'error': 'File type not allowed'}), 400
-
-    return jsonify({'error': 'No file part'}), 400
+            if file.filename == '':
+                return jsonify({'error': 'No selected file'}), 400
+    
+            if file and allowed_file(file.filename):
+                # Secure the filename to prevent directory traversal attacks
+                filename = secure_filename(file.filename)
+                
+                # Save the file to the upload folder
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                
+                # Process the uploaded text or CSV file
+                file_content = process_text(filename)
+                
+                if not file_content:
+                    return jsonify({'error': 'Unable to process the file'}), 500
+                
+                return jsonify({'message': 'File uploaded successfully', 'content': file_content}), 200
+            else:
+                return jsonify({'error': 'File type not allowed'}), 400
+    except (e):
+        return jsonify({'error': str(e}), 400
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
