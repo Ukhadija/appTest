@@ -7,13 +7,15 @@ app = Flask(__name__)
 CORS(app)  # Allows all origins (for testing)
 
 # Set upload folder and allowed extensions for file uploads
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))  # Get the directory where app.py is located
-UploadFolder = os.path.join(BASE_DIR, 'UploadFolder')  # Set upload folder relative to app.py
-
+UploadFolder = '/path/to/upload/folder'  # Modify with the actual path
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'csv'}  # Add more file types if needed
 
+# Ensure the upload folder exists
+if not os.path.exists(UploadFolder):
+    os.makedirs(UploadFolder)
+
 # Configure Flask app
-app.config['UploadFolder'] = UploadFolder
+app.config['UPLOAD_FOLDER'] = UploadFolder
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # Max file size: 16 MB
 
 def allowed_file(filename):
@@ -21,7 +23,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def process_text(filename):
-    file_path = os.path.join(app.config['UploadFolder'], filename)
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
     
     # Check if file exists
     if not os.path.exists(file_path):
@@ -48,17 +50,19 @@ def process():
             filename = secure_filename(file.filename)
             
             # Save the file to the upload folder
-            file.save(os.path.join(app.config['UploadFolder'], filename))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             
             # Process the uploaded text or CSV file
             file_content = process_text(filename)
+            
+            if not file_content:
+                return jsonify({'error': 'Unable to process the file'}), 500
             
             return jsonify({'message': 'File uploaded successfully', 'content': file_content}), 200
         else:
             return jsonify({'error': 'File type not allowed'}), 400
 
-    
-    return jsonify({'input': input_text, 'output': file_content})
+    return jsonify({'error': 'No file part'}), 400
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
