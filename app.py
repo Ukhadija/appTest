@@ -55,10 +55,8 @@ def process():
         else:
             return jsonify({'error': 'File type not allowed'}), 400
 
-    # If no file is uploaded, proceed with processing text (when sending JSON data)
-    output_text = process_text(input_text)
     
-    return output_text
+    return jsonify({'input': input_text, 'output': file_content})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
