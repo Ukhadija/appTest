@@ -8,7 +8,7 @@ CORS(app)  # Allows all origins (for testing)
 
 # Set upload folder and allowed extensions for file uploads
 UploadFolder = '/path/to/upload/folder'  # Modify with the actual path
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}  # Add more file types if needed
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','csv'}  # Add more file types if needed
 
 # Configure Flask app
 app.config['UploadFolder'] = UploadFolder
