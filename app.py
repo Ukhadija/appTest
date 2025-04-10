@@ -752,7 +752,7 @@ def run_time_tag_gen(collection_name,file,client):
         
     except ValueError as e:
         print("Caught error:", e)
-        return "Error in generating"
+        return "Error in generating" + str(e)
         
 
 def TagGeneration(input_text):
